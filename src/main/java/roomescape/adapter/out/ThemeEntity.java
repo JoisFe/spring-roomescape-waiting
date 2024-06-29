@@ -1,13 +1,30 @@
 package roomescape.adapter.out;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import roomescape.domain.Theme;
 
+@Entity(name = "theme")
 public class ThemeEntity {
 
-  private final Long id;
-  private final String name;
-  private final String description;
-  private final String thumbnail;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+  private String name;
+  private String description;
+  private String thumbnail;
+
+  @OneToMany(mappedBy = "theme")
+  private List<ReservationEntity> reservationEntities = new ArrayList<>();
+
+  public ThemeEntity() {
+  }
 
   public ThemeEntity(Long id, String name, String description, String thumbnail) {
     this.id = id;
@@ -47,5 +64,9 @@ public class ThemeEntity {
   @Override
   public int hashCode() {
     return Objects.hashCode(id);
+  }
+
+  public static ThemeEntity of(Theme theme) {
+    return new ThemeEntity(theme.getId(), theme.getName(), theme.getDescription(), theme.getThumbnail());
   }
 }

@@ -1,20 +1,40 @@
 package roomescape.adapter.out;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import java.util.Objects;
 
+@Entity(name = "reservation")
 public class ReservationEntity {
 
-  private final Long id;
-  private final String name;
-  private final String date;
-  private final ReservationTimeEntity time;
-  private final ThemeEntity theme;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-  public ReservationEntity(Long id, String name, String date, ReservationTimeEntity time, ThemeEntity theme) {
+  private String name;
+
+  private String date;
+
+  @ManyToOne
+  @JoinColumn(name = "time_id")
+  private ReservationTimeEntity reservationTime;
+
+  @ManyToOne
+  @JoinColumn(name = "theme_id")
+  private ThemeEntity theme;
+
+  public ReservationEntity() {
+  }
+
+  public ReservationEntity(Long id, String name, String date, ReservationTimeEntity reservationTime, ThemeEntity theme) {
     this.id = id;
     this.name = name;
     this.date = date;
-    this.time = time;
+    this.reservationTime = reservationTime;
     this.theme = theme;
   }
 
@@ -30,8 +50,8 @@ public class ReservationEntity {
     return date;
   }
 
-  public ReservationTimeEntity getTime() {
-    return time;
+  public ReservationTimeEntity getReservationTime() {
+    return reservationTime;
   }
 
   public ThemeEntity getTheme() {

@@ -1,11 +1,28 @@
 package roomescape.adapter.out;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+@Entity(name = "reservation_time")
 public class ReservationTimeEntity {
 
-  private final Long id;
-  private final String startAt;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+  private String startAt;
+
+  @OneToMany(mappedBy = "reservationTime")
+  private List<ReservationEntity> reservationEntities = new ArrayList<>();
+
+
+public ReservationTimeEntity() {
+  }
 
   public ReservationTimeEntity(Long id, String startAt) {
     this.id = id;

@@ -24,7 +24,7 @@ public class ReservationMapper {
 
   public static Reservation mapToDomain(ReservationEntity reservationEntity) {
     return Reservation.of(reservationEntity.getId(), reservationEntity.getName(), reservationEntity.getDate(),
-      ReservationTimeMapper.mapToDomain(reservationEntity.getTime()), null);
+      ReservationTimeMapper.mapToDomain(reservationEntity.getReservationTime()), null);
   }
 
   public static ReservationEntity mapToEntity(Reservation reservation) {

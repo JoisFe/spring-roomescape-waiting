@@ -21,9 +21,4 @@ public class ReservationTime {
   public static ReservationTime of(Long id, String startAt) {
     return new ReservationTime(id, startAt);
   }
-
-  public ReservationTime addId(Long index) {
-    return new ReservationTime(index, this.startAt);
-  }
-
 }

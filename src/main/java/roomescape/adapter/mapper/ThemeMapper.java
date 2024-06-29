@@ -23,4 +23,8 @@ public class ThemeMapper {
     return Theme.of(themeEntity.getId(), themeEntity.getName(), themeEntity.getDescription(),
       themeEntity.getThumbnail());
   }
+
+  public static ThemeEntity mapToEntity(Theme theme) {
+    return ThemeEntity.of(theme);
+  }
 }
