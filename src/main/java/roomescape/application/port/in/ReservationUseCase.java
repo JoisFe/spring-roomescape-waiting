@@ -2,7 +2,9 @@ package roomescape.application.port.in;
 
 import java.util.List;
 import roomescape.application.dto.AdminReservationCommand;
+import roomescape.application.dto.MemberInfo;
 import roomescape.application.dto.ReservationCommand;
+import roomescape.application.dto.ReservationMineResponse;
 import roomescape.application.dto.ReservationResponse;
 
 public interface ReservationUseCase {
@@ -13,5 +15,7 @@ public interface ReservationUseCase {
 
   void deleteReservation(Long id);
 
-  void registerAdminReservation(AdminReservationCommand adminReservationCommand);
+  void registerAdminReservation(AdminReservationCommand adminReservationCommand, MemberInfo memberInfo);
+
+  List<ReservationMineResponse> retrieveMyReservations(Long memberId);
 }

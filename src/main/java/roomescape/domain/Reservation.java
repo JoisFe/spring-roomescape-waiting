@@ -9,13 +9,15 @@ public class Reservation {
   private final String date;
   private final ReservationTime time;
   private final Theme theme;
+  private final Member member;
 
-  public Reservation(Long id, String name, String date, ReservationTime time, Theme theme) {
+  public Reservation(Long id, String name, String date, ReservationTime time, Theme theme, Member member) {
     this.id = id;
     this.name = name;
     this.date = date;
     this.time = time;
     this.theme = theme;
+    this.member = member;
   }
 
   public Long getId() {
@@ -38,8 +40,12 @@ public class Reservation {
     return theme;
   }
 
+  public Member getMember() {
+    return member;
+  }
+
   public Reservation addId(Long index) {
-    return new Reservation(index, this.name, this.date, this.time, this.theme);
+    return new Reservation(index, this.name, this.date, this.time, this.theme, this.member);
   }
 
   @Override
@@ -70,11 +76,11 @@ public class Reservation {
       '}';
   }
 
-  public static Reservation of(Long id, String name, String date, ReservationTime time, Theme theme) {
-    return new Reservation(id, name, date, time, theme);
+  public static Reservation of(Long id, String name, String date, ReservationTime time, Theme theme, Member member) {
+    return new Reservation(id, name, date, time, theme, member);
   }
 
   public Reservation addReservationTimeAndTheme(ReservationTime reservationTime, Theme theme) {
-    return new Reservation(this.id, this.name, this.date, reservationTime, theme);
+    return new Reservation(this.id, this.name, this.date, reservationTime, theme, this.member);
   }
 }

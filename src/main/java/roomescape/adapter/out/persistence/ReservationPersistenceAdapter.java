@@ -56,4 +56,12 @@ public class ReservationPersistenceAdapter implements ReservationPort {
   public Integer countReservationById(Long id) {
     return reservationRepository.countById(id);
   }
+
+  @Override
+  public List<Reservation> findReservationsByMemberId(Long memberId) {
+    return reservationRepository.findByMemberId(memberId)
+                                .stream()
+                                .map(ReservationMapper::mapToDomain)
+                                .toList();
+  }
 }

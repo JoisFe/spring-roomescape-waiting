@@ -8,12 +8,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import roomescape.adapter.mapper.ReservationMapper;
 import roomescape.application.dto.AdminReservationCommand;
+import roomescape.application.dto.MemberInfo;
 import roomescape.application.dto.ReservationCommand;
+import roomescape.application.dto.ReservationMineResponse;
 import roomescape.application.dto.ReservationResponse;
 import roomescape.application.port.in.ReservationUseCase;
+import roomescape.application.port.out.MemberPort;
 import roomescape.application.port.out.ReservationPort;
 import roomescape.application.port.out.ReservationTimePort;
 import roomescape.application.port.out.ThemePort;
+import roomescape.domain.Member;
 import roomescape.domain.Reservation;
 import roomescape.domain.ReservationTime;
 import roomescape.domain.Theme;
@@ -28,12 +32,15 @@ public class ReservationService implements ReservationUseCase {
     private final ReservationPort reservationPort;
     private final ReservationTimePort reservationTimePort;
     private final ThemePort themePort;
+    private final MemberPort memberPort;
 
     public ReservationService(ReservationPort reservationPort, ReservationTimePort reservationTimePort,
-                              ThemePort themePort) {
+      ThemePort themePort,
+      MemberPort memberPort) {
         this.reservationPort = reservationPort;
         this.reservationTimePort = reservationTimePort;
         this.themePort = themePort;
+        this.memberPort = memberPort;
     }
 
     @Transactional(readOnly = true)
@@ -77,7 +84,7 @@ public class ReservationService implements ReservationUseCase {
     }
 
     @Override
-    public void registerAdminReservation(AdminReservationCommand adminReservationCommand) {
+    public void registerAdminReservation(AdminReservationCommand adminReservationCommand, MemberInfo memberInfo) {
         ReservationTime reservationTime = reservationTimePort.findReservationTimeById(adminReservationCommand.timeId())
                                                              .orElseThrow(NotFoundReservationException::new);
         Theme theme = themePort.findThemeById(adminReservationCommand.themeId())
@@ -90,8 +97,20 @@ public class ReservationService implements ReservationUseCase {
             throw new ReservationTimeConflictException();
         }
 
+        Member member = memberPort.findMemberByEmail(memberInfo.email())
+                                  .orElseThrow(NotFoundReservationException::new);
+
         Reservation reservation = Reservation.of(null, "예약이름", adminReservationCommand.date(),
-            reservationTime, theme);
+            reservationTime, theme, member);
         reservationPort.saveReservation(reservation);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<ReservationMineResponse> retrieveMyReservations(Long memberId) {
+        return reservationPort.findReservationsByMemberId(memberId)
+                              .stream()
+                              .map(ReservationMapper::mapToMineResponse)
+                              .toList();
     }
 }

@@ -3,6 +3,7 @@ package roomescape.application.service;
 import org.springframework.stereotype.Service;
 import roomescape.application.dto.LoginCommand;
 import roomescape.application.dto.MemberCommand;
+import roomescape.application.dto.MemberInfo;
 import roomescape.application.dto.MemberResponse;
 import roomescape.application.port.in.LoginUseCase;
 import roomescape.application.port.out.MemberPort;
@@ -38,12 +39,12 @@ public class LoginService implements LoginUseCase {
   }
 
   @Override
-  public MemberResponse findMember(String payload, Role role) {
-      return new MemberResponse(payload, role);
+  public MemberInfo findMember(String payload, Role role) {
+      return new MemberInfo(payload, role);
   }
 
   @Override
-  public MemberResponse findMemberByToken(String token) {
+  public MemberInfo findMemberByToken(String token) {
     if (!jwtTokenProvider.validateToken(token)) {
       throw new AuthenticationException();
     }

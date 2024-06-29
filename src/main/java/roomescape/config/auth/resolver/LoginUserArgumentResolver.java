@@ -9,6 +9,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import roomescape.annotation.UserInfo;
+import roomescape.application.dto.MemberInfo;
 import roomescape.application.dto.MemberResponse;
 import roomescape.application.port.in.LoginUseCase;
 import roomescape.exception.AuthenticationException;
@@ -28,7 +29,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
     }
 
     @Override
-    public MemberResponse resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+    public MemberInfo resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                           NativeWebRequest webRequest, WebDataBinderFactory binderFactory)
         throws Exception {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();

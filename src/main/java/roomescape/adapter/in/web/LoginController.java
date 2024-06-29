@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import roomescape.annotation.UserInfo;
 import roomescape.application.dto.LoginCommand;
+import roomescape.application.dto.MemberInfo;
 import roomescape.application.dto.MemberResponse;
 import roomescape.application.port.in.LoginUseCase;
 
@@ -33,8 +34,8 @@ public class LoginController {
 
   @ResponseBody
   @GetMapping("/check")
-  public ResponseEntity<MemberResponse> checkInvalidLogin(@UserInfo MemberResponse memberResponse) {
-    return ResponseEntity.ok(memberResponse);
+  public ResponseEntity<MemberInfo> checkInvalidLogin(@UserInfo MemberInfo memberInfo) {
+    return ResponseEntity.ok(memberInfo);
   }
 
   @ResponseStatus(HttpStatus.OK)

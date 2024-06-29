@@ -2,9 +2,9 @@ package roomescape.adapter.mapper;
 
 import roomescape.adapter.out.ReservationEntity;
 import roomescape.application.dto.ReservationCommand;
+import roomescape.application.dto.ReservationMineResponse;
 import roomescape.application.dto.ReservationResponse;
 import roomescape.domain.Reservation;
-import roomescape.domain.ReservationTime;
 
 public class ReservationMapper {
 
@@ -19,16 +19,25 @@ public class ReservationMapper {
   }
 
   public static Reservation mapToDomain(ReservationCommand reservationCommand) {
-    return Reservation.of(null, reservationCommand.name(), reservationCommand.date(), null, null);
+    return Reservation.of(null, reservationCommand.name(), reservationCommand.date(), null, null, null);
   }
 
   public static Reservation mapToDomain(ReservationEntity reservationEntity) {
     return Reservation.of(reservationEntity.getId(), reservationEntity.getName(), reservationEntity.getDate(),
-      ReservationTimeMapper.mapToDomain(reservationEntity.getReservationTime()), null);
+      ReservationTimeMapper.mapToDomain(reservationEntity.getReservationTime()),
+      ThemeMapper.mapToDomain(reservationEntity.getTheme()), MemberMapper.mapToDomain(reservationEntity.getMember()));
   }
 
   public static ReservationEntity mapToEntity(Reservation reservation) {
     return ReservationEntity.of(reservation.getId(), reservation.getName(), reservation.getDate(),
-      ReservationTimeMapper.mapToEntity(reservation.getTime()));
+      ReservationTimeMapper.mapToEntity(reservation.getTime()), ThemeMapper.mapToEntity(reservation.getTheme()),
+      MemberMapper.mapToEntity(reservation.getMember()));
+  }
+
+  public static ReservationMineResponse mapToMineResponse(Reservation reservation) {
+    return ReservationMineResponse.of(reservation.getId(), reservation.getTheme()
+                                                                      .getName(), reservation.getDate(),
+      reservation.getTime()
+                 .getStartAt(), "예약");
   }
 }

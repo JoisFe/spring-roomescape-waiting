@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import roomescape.application.dto.MemberInfo;
 import roomescape.application.dto.MemberResponse;
 import roomescape.application.port.in.LoginUseCase;
 import roomescape.exception.AuthenticationException;
@@ -28,9 +29,9 @@ public class AdminInterceptor implements HandlerInterceptor {
                            .orElseThrow(AuthenticationException::new)
                            .getValue();
 
-        MemberResponse memberResponse = loginUseCase.findMemberByToken(jwt);
+        MemberInfo memberInfo = loginUseCase.findMemberByToken(jwt);
 
-        if (!memberResponse.role().name().equals("ADMIN")) {
+        if (!memberInfo.role().name().equals("ADMIN")) {
             throw new AuthorizationException();
         }
 

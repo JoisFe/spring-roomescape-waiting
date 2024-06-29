@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import roomescape.annotation.UserInfo;
 import roomescape.application.dto.ReservationCommand;
+import roomescape.application.dto.ReservationMineResponse;
 import roomescape.application.dto.ReservationResponse;
 import roomescape.application.port.in.ReservationUseCase;
 
@@ -43,5 +45,10 @@ public class ReservationController {
   @DeleteMapping("/{id}")
   public void deleteReservation(@PathVariable("id") Long id) {
     reservationUseCase.deleteReservation(id);
+  }
+
+  @GetMapping("-mine")
+  public ResponseEntity<List<ReservationMineResponse>> getMyReservations(@UserInfo Long memberId) {
+    return new ResponseEntity<>(reservationUseCase.retrieveMyReservations(memberId), HttpStatus.OK);
   }
 }

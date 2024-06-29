@@ -27,15 +27,21 @@ public class ReservationEntity {
   @JoinColumn(name = "theme_id")
   private ThemeEntity theme;
 
+  @ManyToOne
+  @JoinColumn(name = "member_id")
+  private MemberEntity member;
+
   public ReservationEntity() {
   }
 
-  public ReservationEntity(Long id, String name, String date, ReservationTimeEntity reservationTime, ThemeEntity theme) {
+  public ReservationEntity(Long id, String name, String date, ReservationTimeEntity reservationTime, ThemeEntity theme,
+    MemberEntity member) {
     this.id = id;
     this.name = name;
     this.date = date;
     this.reservationTime = reservationTime;
     this.theme = theme;
+    this.member = member;
   }
 
   public Long getId() {
@@ -58,6 +64,10 @@ public class ReservationEntity {
     return theme;
   }
 
+  public MemberEntity getMember() {
+    return member;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -75,7 +85,8 @@ public class ReservationEntity {
     return Objects.hashCode(id);
   }
 
-  public static ReservationEntity of(Long id, String name, String date, ReservationTimeEntity time) {
-    return new ReservationEntity(id, name, date, time, null);
+  public static ReservationEntity of(Long id, String name, String date, ReservationTimeEntity time, ThemeEntity theme,
+    MemberEntity member) {
+    return new ReservationEntity(id, name, date, time, theme, member);
   }
 }

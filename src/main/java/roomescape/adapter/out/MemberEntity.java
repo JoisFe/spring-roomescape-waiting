@@ -6,6 +6,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import roomescape.domain.Member;
 import roomescape.enums.Role;
@@ -21,6 +24,9 @@ public class MemberEntity {
   private String password;
   @Enumerated(EnumType.STRING)
   private Role role;
+
+  @OneToMany(mappedBy = "member")
+  private List<ReservationEntity> reservationEntities = new ArrayList<>();
 
   public MemberEntity() {
   }

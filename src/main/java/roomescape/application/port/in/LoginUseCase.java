@@ -1,6 +1,7 @@
 package roomescape.application.port.in;
 
 import roomescape.application.dto.LoginCommand;
+import roomescape.application.dto.MemberInfo;
 import roomescape.application.dto.MemberResponse;
 import roomescape.enums.Role;
 
@@ -10,7 +11,7 @@ public interface LoginUseCase {
 
   String createToken(LoginCommand loginCommand);
 
-  MemberResponse findMember(String payload, Role role);
+  MemberInfo findMember(String payload, Role role);
 
-  MemberResponse findMemberByToken(String jwt);
+  MemberInfo findMemberByToken(String jwt);
 }
