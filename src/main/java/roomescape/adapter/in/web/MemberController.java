@@ -23,6 +23,11 @@ public class MemberController {
     this.memberUseCase = memberUseCase;
   }
 
+  @GetMapping("/signup")
+  public String getMemberSignupPage() {
+    return "signup";
+  }
+
   @GetMapping("/reservation")
   public String getMemberReservationPage() {
     return "reservation";

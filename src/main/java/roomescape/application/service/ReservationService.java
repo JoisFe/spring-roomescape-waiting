@@ -3,6 +3,8 @@ package roomescape.application.service;
 import static roomescape.adapter.mapper.ReservationMapper.mapToDomain;
 import static roomescape.adapter.mapper.ReservationMapper.mapToResponse;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,9 +69,12 @@ public class ReservationService implements ReservationUseCase {
         Theme theme = themePort.findThemeById(reservationCommand.themeId())
                                .orElseThrow(NotFoundReservationException::new);
 
+        Member member = memberPort.findMemberByEmail(reservationCommand.name())
+                                  .orElseThrow(NotFoundReservationException::new);
+
         Reservation reservation = mapToDomain(reservationCommand);
 
-        reservation = reservation.addReservationTimeAndTheme(reservationTime, theme);
+        reservation = reservation.addReservationTimeAndTheme(reservationTime, theme, member);
 
         return mapToResponse(reservationPort.saveReservation(reservation));
     }
@@ -100,7 +105,7 @@ public class ReservationService implements ReservationUseCase {
         Member member = memberPort.findMemberByEmail(memberInfo.email())
                                   .orElseThrow(NotFoundReservationException::new);
 
-        Reservation reservation = Reservation.of(null, "예약이름", adminReservationCommand.date(),
+        Reservation reservation = Reservation.of(null, adminReservationCommand.date(),
             reservationTime, theme, member);
         reservationPort.saveReservation(reservation);
     }

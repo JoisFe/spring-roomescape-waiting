@@ -15,8 +15,6 @@ public class ReservationEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String name;
-
   private String date;
 
   @ManyToOne
@@ -34,10 +32,9 @@ public class ReservationEntity {
   public ReservationEntity() {
   }
 
-  public ReservationEntity(Long id, String name, String date, ReservationTimeEntity reservationTime, ThemeEntity theme,
+  public ReservationEntity(Long id, String date, ReservationTimeEntity reservationTime, ThemeEntity theme,
     MemberEntity member) {
     this.id = id;
-    this.name = name;
     this.date = date;
     this.reservationTime = reservationTime;
     this.theme = theme;
@@ -46,10 +43,6 @@ public class ReservationEntity {
 
   public Long getId() {
     return id;
-  }
-
-  public String getName() {
-    return name;
   }
 
   public String getDate() {
@@ -85,8 +78,8 @@ public class ReservationEntity {
     return Objects.hashCode(id);
   }
 
-  public static ReservationEntity of(Long id, String name, String date, ReservationTimeEntity time, ThemeEntity theme,
+  public static ReservationEntity of(Long id, String date, ReservationTimeEntity time, ThemeEntity theme,
     MemberEntity member) {
-    return new ReservationEntity(id, name, date, time, theme, member);
+    return new ReservationEntity(id, date, time, theme, member);
   }
 }

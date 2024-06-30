@@ -2,12 +2,14 @@ package roomescape.application.service;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import roomescape.adapter.mapper.MemberMapper;
 import roomescape.application.dto.MemberCommand;
 import roomescape.application.dto.MemberResponse;
 import roomescape.application.port.in.MemberUseCase;
 import roomescape.application.port.out.MemberPort;
 
+@Transactional
 @Service
 public class MemberService implements MemberUseCase {
 
@@ -17,6 +19,7 @@ public class MemberService implements MemberUseCase {
         this.memberPort = memberPort;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<MemberResponse> findMembers() {
         return memberPort.findMembers()

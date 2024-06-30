@@ -8,34 +8,28 @@ document.addEventListener('DOMContentLoaded', () => {
   flatpickr("#datepicker", {
     inline: true,
     onChange: function (selectedDates, dateStr, instance) {
-      if (dateStr === '') {
-        return;
-      }
+      if (dateStr === '') return;
       checkDate();
     }
   });
 
   document.getElementById('theme-slots').addEventListener('click', event => {
     if (event.target.classList.contains('theme-slot')) {
-      document.querySelectorAll('.theme-slot').forEach(
-          slot => slot.classList.remove('active'));
+      document.querySelectorAll('.theme-slot').forEach(slot => slot.classList.remove('active'));
       event.target.classList.add('active');
       checkDateAndTheme();
     }
   });
 
   document.getElementById('time-slots').addEventListener('click', event => {
-    if (event.target.classList.contains('time-slot')
-        && !event.target.classList.contains('disabled')) {
-      document.querySelectorAll('.time-slot').forEach(
-          slot => slot.classList.remove('active'));
+    if (event.target.classList.contains('time-slot') && !event.target.classList.contains('disabled')) {
+      document.querySelectorAll('.time-slot').forEach(slot => slot.classList.remove('active'));
       event.target.classList.add('active');
       checkDateAndThemeAndTime();
     }
   });
 
-  document.getElementById('reserve-button').addEventListener('click',
-      onReservationButtonClick);
+  document.getElementById('reserve-button').addEventListener('click', onReservationButtonClick);
 });
 
 function renderTheme(themes) {
@@ -50,8 +44,7 @@ function renderTheme(themes) {
 
 function createSlot(type, text, id, booked) {
   const div = document.createElement('div');
-  div.className = type
-      + '-slot cursor-pointer bg-light border rounded p-3 mb-2';
+  div.className = type + '-slot cursor-pointer bg-light border rounded p-3 mb-2';
   div.textContent = text;
   div.setAttribute('data-' + type + '-id', id);
   if (type === 'time') {
@@ -84,27 +77,26 @@ function checkDateAndTheme() {
   const selectedThemeElement = document.querySelector('.theme-slot.active');
   if (selectedDate && selectedThemeElement) {
     const selectedThemeId = selectedThemeElement.getAttribute('data-theme-id');
-
     fetchAvailableTimes(selectedDate, selectedThemeId);
   }
 }
 
 function fetchAvailableTimes(date, themeId) {
-  const availableUrl = `/times/available?date=${encodeURIComponent(
-      date)}&themeId=${encodeURIComponent(themeId)}`;
+  let params = new URLSearchParams();
+  params.append('date', date);
+  params.append('themeId', themeId);
 
-fetch(availableUrl, { // 예약 가능 시간 조회 API endpoint
-  method: 'GET',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-}).then(response => {
-  if (response.status === 200) {
-    return response.json();
-  }
-  throw new Error('Read failed');
-}).then(renderAvailableTimes)
-.catch(error => console.error("Error fetching available times:", error));
+  let url = '/times/available?' + params.toString();
+  fetch(url, { // 예약 가능 시간 조회 API endpoint
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).then(response => {
+    if (response.status === 200) return response.json();
+    throw new Error('Read failed');
+  }).then(renderAvailableTimes)
+  .catch(error => console.error("Error fetching available times:", error));
 }
 
 function renderAvailableTimes(times) {
@@ -122,7 +114,6 @@ function renderAvailableTimes(times) {
   times.forEach(time => {
     const startAt = time.startAt;
     const timeId = time.id;
-
     const alreadyBooked = false;
 
     const div = createSlot('time', startAt, timeId, alreadyBooked); // createSlot('time', 시작 시간, time id, 예약 여부)
@@ -152,13 +143,17 @@ function checkDateAndThemeAndTime() {
 
 function onReservationButtonClick() {
   const selectedDate = document.getElementById("datepicker").value;
-  const selectedThemeId = document.querySelector(
-      '.theme-slot.active')?.getAttribute('data-theme-id');
-  const selectedTimeId = document.querySelector(
-      '.time-slot.active')?.getAttribute('data-time-id');
+  const selectedThemeId = document.querySelector('.theme-slot.active')?.getAttribute('data-theme-id');
+  const selectedTimeId = document.querySelector('.time-slot.active')?.getAttribute('data-time-id');
   const name = document.getElementById('user-name').value;
 
   if (selectedDate && selectedThemeId && selectedTimeId) {
+
+    /*
+    TODO: [3단계] 사용자 예약 - 예약 요청 API 호출
+          [5단계] 예약 생성 기능 변경 - 사용자
+          request 명세에 맞게 설정
+    */
     const reservationData = {
       date: selectedDate,
       themeId: selectedThemeId,
@@ -174,9 +169,7 @@ function onReservationButtonClick() {
       body: JSON.stringify(reservationData)
     })
     .then(response => {
-      if (!response.ok) {
-        throw new Error('Reservation failed');
-      }
+      if (!response.ok) throw new Error('Reservation failed');
       return response.json();
     })
     .then(data => {
@@ -195,9 +188,7 @@ function onReservationButtonClick() {
 function requestRead(endpoint) {
   return fetch(endpoint)
   .then(response => {
-    if (response.status === 200) {
-      return response.json();
-    }
+    if (response.status === 200) return response.json();
     throw new Error('Read failed');
   });
 }

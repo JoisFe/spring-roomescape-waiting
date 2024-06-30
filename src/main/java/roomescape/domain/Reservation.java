@@ -5,15 +5,13 @@ import java.util.Objects;
 public class Reservation {
 
   private final Long id;
-  private final String name;
   private final String date;
   private final ReservationTime time;
   private final Theme theme;
   private final Member member;
 
-  public Reservation(Long id, String name, String date, ReservationTime time, Theme theme, Member member) {
+  public Reservation(Long id, String date, ReservationTime time, Theme theme, Member member) {
     this.id = id;
-    this.name = name;
     this.date = date;
     this.time = time;
     this.theme = theme;
@@ -22,10 +20,6 @@ public class Reservation {
 
   public Long getId() {
     return id;
-  }
-
-  public String getName() {
-    return name;
   }
 
   public String getDate() {
@@ -45,7 +39,7 @@ public class Reservation {
   }
 
   public Reservation addId(Long index) {
-    return new Reservation(index, this.name, this.date, this.time, this.theme, this.member);
+    return new Reservation(index, this.date, this.time, this.theme, this.member);
   }
 
   @Override
@@ -69,18 +63,17 @@ public class Reservation {
   public String toString() {
     return "Reservation{" +
       "id=" + id +
-      ", name='" + name + '\'' +
       ", date='" + date + '\'' +
       ", time=" + time +
       ", theme=" + theme +
       '}';
   }
 
-  public static Reservation of(Long id, String name, String date, ReservationTime time, Theme theme, Member member) {
-    return new Reservation(id, name, date, time, theme, member);
+  public static Reservation of(Long id, String date, ReservationTime time, Theme theme, Member member) {
+    return new Reservation(id, date, time, theme, member);
   }
 
-  public Reservation addReservationTimeAndTheme(ReservationTime reservationTime, Theme theme) {
-    return new Reservation(this.id, this.name, this.date, reservationTime, theme, this.member);
+  public Reservation addReservationTimeAndTheme(ReservationTime reservationTime, Theme theme, Member member) {
+    return new Reservation(this.id, this.date, reservationTime, theme, member);
   }
 }
